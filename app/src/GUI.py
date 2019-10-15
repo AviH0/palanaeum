@@ -2,8 +2,8 @@ from time import localtime
 from time import strftime
 from tkinter import *
 
-from src import SheetReader
-from src.Student import Student
+from app.src import SheetReader
+from app.src.Student import Student
 
 
 
