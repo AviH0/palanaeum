@@ -47,7 +47,7 @@ If something goes wrong, the best thing to do is to open the google sheet and so
 
 ## Github repository
 
-All the code is available [here](https://github.com/AviH0/LabSupportInterface)
+All the code is available [here](https://github.com/AviH0/LabSupportInterface).
 
 ## Report a problem
 
@@ -55,5 +55,5 @@ If you encounter an issue, please report it [here](https://github.com/AviH0/LabS
 
 ## Contribute
 
-If you feel like making a contribution, please make a pull request and decribe in detail the changes that you made.
+If you feel like making a contribution, please make a [pull request](https://github.com/AviH0/LabSupportInterface/compare) and decribe in detail the changes that you made.
 
