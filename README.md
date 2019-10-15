@@ -2,8 +2,8 @@
 
 ## Installation
 
-Ensure sure your python version is at least 3.6 and the interpreter has the following packages installed:
-gspread, oauth2client
+Ensure sure your python version is at least **3.6** and the interpreter has the following packages installed:
+**gspread, oauth2client**
 
 ```
 pip install gspread, oauth2client
@@ -51,7 +51,7 @@ All the code is available [here](https://github.com/AviH0/LabSupportInterface).
 
 ## Report a problem
 
-If you encounter an issue, please report it [here](https://github.com/AviH0/LabSupportInterface/issues/new), and include a detailed description of the issue and the steps to reproduce it.
+If you encounter an issue, please report it [here](https://github.com/AviH0/LabSupportInterface/issues/new), and include a **detailed description of the issue and the steps to reproduce it**.
 
 ## Contribute
 
