@@ -47,11 +47,11 @@ If something goes wrong, the best thing to do is to open the google sheet and so
 
 ## Github repository
 
-All the code is available [here](https://github.com/AviH0/LabSuuportInterface)
+All the code is available [here](https://github.com/AviH0/LabSupportInterface)
 
 ## Report a problem
 
-If you encounter an issue, please report it [here](https://github.com/AviH0/LabSuuportInterface/issues/new), and include a detailed description of the issue and the steps to reproduce it.
+If you encounter an issue, please report it [here](https://github.com/AviH0/LabSupportInterface/issues/new), and include a detailed description of the issue and the steps to reproduce it.
 
 ## Contribute
 
