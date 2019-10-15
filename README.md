@@ -9,7 +9,9 @@ gspread, oauth2client
 pip install gspread, oauth2client
 ```
 
-Make sure you have the json file in your credentials directory (if you donwloaded the app from the github repository you will need to get it from somewehere else)
+Make sure you have the json file in your credentials directory (if you donwloaded the app from the github repository you will need to get it from somewehere else).
+
+To run the program, simply run LabSupportClient.py
 
 
 ## Usage
@@ -43,10 +45,15 @@ You can right-click on any name to:
 
 If something goes wrong, the best thing to do is to open the google sheet and sort it out manually.
 
+## Github repository
+
+All the code is available [here](https://github.com/AviH0/LabSuuportInterface)
+
 ## Report a problem
 
-If you encounter an issue, please report it [here](https://github.com/AviH0/LabSuuportInterface/issues), and include a detailed description of the issue and the steps to reproduce it.
+If you encounter an issue, please report it [here](https://github.com/AviH0/LabSuuportInterface/issues/new), and include a detailed description of the issue and the steps to reproduce it.
 
 ## Contribute
 
 If you feel like making a contribution, please make a pull request and decribe in detail the changes that you made.
+
