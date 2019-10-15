@@ -16,7 +16,7 @@ CALL_MENU_OPT = "Call Student"
 
 DATETIME_FORMAT = '%H:%M'
 
-ARRIVED_BTN_TEXT = "Next Request"
+ARRIVED_BTN_TEXT = "Student Arrived"
 NO_SHOW_BTN_TEXT = "No Show"
 FINISHED_BTN_TEXT = "Next Request"
 
@@ -197,7 +197,10 @@ class Gui:
         for slave in self.no_shows_frame.pack_slaves():
             slave.pack_forget()
         for stu in self.no_shows_list:
-            color = 'orange'
+            if stu.should_be_red():
+                color = 'red'
+            else:
+                color = 'orange'
             name = Label(self.no_shows_frame,
                          text=INDEX.format(
                              stu.index + 1) + NAME + stu.name + ', ' + TOPIC + stu.topic, bg=color, anchor=W,
