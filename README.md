@@ -6,7 +6,7 @@ Ensure sure your python version is at least **3.6** and the interpreter has the 
 **gspread, oauth2client**
 
 ```
-pip install gspread, oauth2client
+pip install gspread oauth2client
 ```
 
 Make sure you have the json file in your credentials directory (if you donwloaded the app from the github repository you will need to get it from somewehere else and place it in app/credentials/).
