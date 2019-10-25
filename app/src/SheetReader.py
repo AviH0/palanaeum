@@ -1,5 +1,11 @@
-import gspread
-from oauth2client.service_account import ServiceAccountCredentials
+try:
+    import gspread
+    from oauth2client.service_account import ServiceAccountCredentials
+except ImportError:
+    print("Please ensure you have the packages: oauth2client, gspread installed before using.\n"
+          "you can install them by pasting the following command into your shell:\n"
+          "python -m pip install gspread oauth2client")
+    exit(1)
 
 # Share spreadsheet with following email address: lab-support@lab-support-intro2cs.iam.gserviceaccount.com
 # Then paste the name of the spreadsheet in the following variable:
