@@ -261,6 +261,8 @@ class Gui:
         Current student has arrived, status is now helping.
         :return: Nothing
         """
+        if not self.current_student:
+            return
         self.current_status = HELPING
         self.draw()
 
