@@ -438,7 +438,8 @@ class Gui:
         self.__get_info()
         # If he was the current student, get the next one:
         if self.current_student and index is self.current_student.index:
-            self.__next_student(False)
+            self.current_student=None
+            # self.__next_student(False)
         else:
             self.draw()
 
