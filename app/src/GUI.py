@@ -5,8 +5,6 @@ from tkinter import *
 from app.src import SheetReader
 from app.src.Student import Student
 
-
-
 GET_INDEX_REGEX = '\((\d+)\).+'
 
 LOAD_MENU_OPT = "Provide Assistance"
@@ -101,7 +99,6 @@ class Gui:
         names_canvas.pack(side=LEFT, expand=True, fill=BOTH)
         names_canvas.configure(xscrollcommand=names_scrollbar2.set)
         # (now packed in the correct order so the scrollbars appear in their correct locations.
-
 
         # No-Shows list:
         no_shows_title = Label(self.root, text=NO_SHOW_LIST_TITLE,
@@ -440,7 +437,7 @@ class Gui:
         self.__get_info()
         # If he was the current student, get the next one:
         if self.current_student and index is self.current_student.index:
-            self.current_student=None
+            self.current_student = None
             # self.__next_student(False)
         else:
             self.draw()
@@ -459,6 +456,9 @@ class Gui:
             for stu in self.current_list:
                 if stu.timestamp == self.current_student.timestamp:
                     self.current_student = stu
+                    break
+            else:
+                self.current_student = None
         self.draw()
 
     @staticmethod
