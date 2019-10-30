@@ -40,3 +40,4 @@ def recursive_overwrite(src, dest, ignore=None):
 
 recursive_overwrite(os.path.join(temp_path, extra_dir_name), ".")
 shutil.rmtree(temp_path, ignore_errors=True)
+os.remove(file_path)
