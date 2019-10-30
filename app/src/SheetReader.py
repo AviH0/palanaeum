@@ -1,6 +1,9 @@
+import sys
+
 try:
     import gspread
     from oauth2client.service_account import ServiceAccountCredentials
+    import requests
 except ImportError:
     print("Please ensure you have the packages: oauth2client, gspread installed before using.\n"
           "you can install them by pasting the following command into your shell:\n"
@@ -19,6 +22,9 @@ def authenticate(func):
             return func(*args, **kwargs)
         except gspread.exceptions.APIError:
             args[0].reauth()
+            return inner(*args, **kwargs)
+        except requests.exceptions.ConnectionError:
+            print("Connection error, please check network connection.", file=sys.stderr)
     return inner
 
 
@@ -35,7 +41,7 @@ class SheetReader:
             self.creds = ServiceAccountCredentials.from_json_keyfile_name(CREDENTIALS_DIRECTORY, self.scope)
             self.client = gspread.authorize(self.creds)
 
-            # Find a workbook by name and open the first sheet
+            # Find a workbook by name and open the second sheet
             # Make sure you use the right name here.
             self.sheet = self.client.open(NAME_OF_SPREADSHEET).get_worksheet(1)
         except FileNotFoundError:
