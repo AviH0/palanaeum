@@ -69,8 +69,8 @@ class Gui:
         # Add about menu:
         menubar = Menu(self.root)
         about_menu = Menu(menubar, tearoff=0)
-        about_menu.add_command(label="about...", command=self.__display_product_info)
-        menubar.add_cascade(label="about", menu=about_menu)
+        about_menu.add_command(label="About...", command=self.__display_product_info)
+        menubar.add_cascade(label="Help", menu=about_menu)
         self.root.config(menu=menubar)
 
         # Set status to waiting for student:
