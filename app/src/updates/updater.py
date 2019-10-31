@@ -30,12 +30,12 @@ def do_update():
 
 def __is_update_needed():
     try:
-        with open("inf.json") as inf:
+        with open("app/src/updates/inf.json") as inf:
             product_info = json.load(inf)
             r = requests.get(INF_JSON_URL)
             newest_info = r.json()
-            installed_version = product_info["version"].split('\.')
-            newest_version = newest_info["version"].split('\.')
+            installed_version = product_info["version"].split('.')
+            newest_version = newest_info["version"].split('.')
             return __compare_versions(installed_version, newest_version)
     except json.JSONDecodeError:
         return True

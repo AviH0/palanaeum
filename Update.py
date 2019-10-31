@@ -1,4 +1,4 @@
-import src.updates.updater
+import app.src.updates.updater
 
 if __name__ == "__main__":
-    src.updates.updater.do_update()
+    app.src.updates.updater.do_update()
