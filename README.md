@@ -13,7 +13,7 @@ Make sure you have the json file in your credentials directory (if you donwloade
 
 To run the program, simply run LabSupportClient.py
 
-
+Note: It is now possible to update the installation using Update.py, however if your installed version is higher than 1.1.0, this will happen automatically whenever there is an update.
 ## Usage
 
 The interface will show a color-coded list of the current students in the queue. Students that are still
