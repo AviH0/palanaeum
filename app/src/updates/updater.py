@@ -80,6 +80,8 @@ def __copy_update():
 
 def __clean_up():
     print("Removing update files... ", end='')
+    if os.path.isfile("updater.py"):
+        os.remove("updater.py")
     shutil.rmtree(TEMP_DIR, ignore_errors=True)
     os.remove(UPDATE_FILE)
     print("done.")
