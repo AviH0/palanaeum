@@ -1,6 +1,8 @@
+import json
 from time import localtime
 from time import strftime
 from tkinter import *
+import tkinter.messagebox
 
 from app.src import SheetReader
 from app.src.Student import Student
@@ -63,6 +65,13 @@ class Gui:
         self.root.geometry(WINDOW_SIZE)
         self.root.title(WINDOW_TITLE)
         # self.root.wm_attributes("-topmost", 1)
+
+        # Add about menu:
+        menubar = Menu(self.root)
+        about_menu = Menu(menubar, tearoff=0)
+        about_menu.add_command(label="about...", command=self.__display_product_info)
+        menubar.add_cascade(label="about", menu=about_menu)
+        self.root.config(menu=menubar)
 
         # Set status to waiting for student:
         self.current_status = WAITING
@@ -460,6 +469,20 @@ class Gui:
             else:
                 self.current_student = None
         self.draw()
+
+    @staticmethod
+    def __display_product_info():
+        try:
+            with open("app/src/updates/inf.json") as inf:
+                product_info = json.load(inf)
+                message = ""
+                for key in product_info:
+                    message += key + ':   ' + str(product_info[key]) + '\n'
+                tkinter.messagebox.showinfo("Product Information", message)
+        except FileNotFoundError:
+            return
+        except json.JSONDecodeError:
+            return
 
     @staticmethod
     def get_index_from_name(name):
