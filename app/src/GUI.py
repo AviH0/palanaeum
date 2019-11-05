@@ -59,7 +59,6 @@ class Gui:
 
         # Create the sheet reader.
         self.reader = SheetReader.SheetReader()
-
         # Create the window:
         self.root = Tk()
         self.root.geometry(WINDOW_SIZE)
@@ -73,6 +72,21 @@ class Gui:
         file_menu.add_command(label="Exit", command=self.root.quit)
         menubar.add_cascade(label="File", menu=file_menu)
 
+        # Add view menu:
+        view_menu = Menu(menubar, tearoff=0)
+        def toggle_always_ontop():
+            currently_on_top = [False]
+            def inner():
+                if not currently_on_top[0]:
+                    self.root.wm_attributes("-topmost", 1)
+                    currently_on_top[0] = True
+                else:
+                    self.root.wm_attributes("-topmost", 0)
+                    currently_on_top[0] = False
+            return inner
+
+        view_menu.add_checkbutton(label="Always on top", command=toggle_always_ontop())
+        menubar.add_cascade(label="View", menu=view_menu)
 
         # Add about menu:
         about_menu = Menu(menubar, tearoff=0)
