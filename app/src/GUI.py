@@ -66,8 +66,15 @@ class Gui:
         self.root.title(WINDOW_TITLE)
         # self.root.wm_attributes("-topmost", 1)
 
-        # Add about menu:
+        # Add file menu:
         menubar = Menu(self.root)
+
+        file_menu = Menu(menubar, tearoff=0)
+        file_menu.add_command(label="Exit", command=self.root.quit)
+        menubar.add_cascade(label="File", menu=file_menu)
+
+
+        # Add about menu:
         about_menu = Menu(menubar, tearoff=0)
         about_menu.add_command(label="About...", command=self.__display_product_info)
         menubar.add_cascade(label="Help", menu=about_menu)
