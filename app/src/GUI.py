@@ -433,7 +433,7 @@ class Gui:
         # if event.widget.master is self.no_shows_frame:
         menu.add_command(label=LOAD_MENU_OPT,
                          command=lambda: self.__load_no_show(event))
-        menu.post(event.x_root, event.y_root)
+        menu.tk_popup(event.x_root, event.y_root)
 
     def __reset_stu(self, index):
         """
