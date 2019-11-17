@@ -124,7 +124,7 @@ class Gui:
 
         # added by Yitzchak:
         names_scrollbar2 = Scrollbar(student_list_frame, command=names_canvas.xview, orient=HORIZONTAL)
-        names_scrollbar.pack(side=RIGHT, fill=Y, expand=True)
+        names_scrollbar.pack(side=RIGHT, fill=Y, expand=False)
         names_scrollbar2.pack(side=BOTTOM, fill=X, expand=False)
         names_canvas.pack(side=LEFT, expand=True, fill=BOTH)
         names_canvas.configure(xscrollcommand=names_scrollbar2.set)
@@ -147,8 +147,8 @@ class Gui:
 
         # added by Yitzchak:
         no_shows_scrollbar2 = Scrollbar(no_show_frame, command=no_shows_canvas.xview, orient=HORIZONTAL)
-        no_shows_scrollbar2.pack(side=BOTTOM, fill=X, expand=True)
-        no_shows_scrollbar.pack(side=RIGHT, fill=Y, expand=True)
+        no_shows_scrollbar2.pack(side=BOTTOM, fill=X, expand=False)
+        no_shows_scrollbar.pack(side=RIGHT, fill=Y, expand=False)
         no_shows_canvas.pack(side=LEFT, expand=True, fill=BOTH)
 
         no_shows_canvas.configure(xscrollcommand=no_shows_scrollbar2.set)
