@@ -4,6 +4,8 @@ from time import strftime
 from tkinter import *
 import tkinter.messagebox
 
+from app.src.tooltip import CreateToolTip
+
 from app.src import SheetReader
 from app.src.Student import Student
 
@@ -26,6 +28,7 @@ WAITING_STU_PRFX = "Waiting for: "
 
 TOPIC = 'Issue: '
 NAME = 'Name: '
+TIMESTAMP = 'Added: {}'
 NO_SHOW_LIST_TITLE = "Missed Appointments"
 STUDENT_LIST_TITLE = "Waiting List"
 
@@ -63,6 +66,7 @@ class Gui:
         self.root = Tk()
         self.root.geometry(WINDOW_SIZE)
         self.root.title(WINDOW_TITLE)
+        self.current_data = []
         # self.root.wm_attributes("-topmost", 1)
 
         # Add file menu:
@@ -185,7 +189,8 @@ class Gui:
 
         def draw_loop():
             self.root.after(5000, draw_loop)
-            self.draw()
+            if self.__get_info():
+                self.draw()
 
         self.root.after(1000, draw_loop)  # Draw the current data in a loop
         self.root.mainloop()  # Start the mainloop
@@ -208,8 +213,14 @@ class Gui:
             #     self.reader.remove_stu(stu.index)
             else:
                 new_list.append(stu)
+
+        need_to_redraw = rows != self.current_data
+
         self.current_list = new_list
         self.no_shows_list = no_show_list
+        self.current_data = rows
+        return need_to_redraw
+
 
     def draw(self):
         """
@@ -231,12 +242,13 @@ class Gui:
                 color = COLOR_FROM_STATUS[stu.status]
             # Add to the frame:
             name = Label(self.names_frame,
-                         text=INDEX.format(
-                             stu.index + 1) + NAME + stu.name + ', ' + TOPIC + stu.topic, bg=color, anchor=W,
+                         text=INDEX.format(stu.index + 1) + NAME + stu.name + ', ' + TOPIC + stu.topic,
+                         bg=color, anchor=W,
                          font=BODY_FONT,
                          justify=LEFT, width=500)
             name.bind("<Button-3>", lambda event: self.__right_click_menu(event))
             name.pack(anchor=W, fill=X, expand=True)
+            CreateToolTip(name, TIMESTAMP.format(stu.timestamp))
 
         # Clear the current list of no-shows:
         for slave in self.no_shows_frame.pack_slaves():
@@ -249,14 +261,15 @@ class Gui:
                 color = 'orange'
             # Add to the frame:
             name = Label(self.no_shows_frame,
-                         text=INDEX.format(
-                             stu.index + 1) + NAME + stu.name + ', ' + TOPIC + stu.topic, bg=color, anchor=W,
+                         text=INDEX.format(stu.index + 1) + NAME + stu.name + ', ' + TOPIC + stu.topic,
+                         bg=color, anchor=W,
                          font=BODY_FONT,
                          justify=LEFT, width=500)
             name.bind("<Double-Button-1>",
                       lambda event: self.__load_no_show(event))
             name.bind("<Button-3>", lambda event: self.__right_click_menu(event))
             name.pack(anchor=W, fill=X, expand=True)
+            CreateToolTip(name, TIMESTAMP.format(stu.timestamp))
 
         # Set the current information to display:
         name = ""
