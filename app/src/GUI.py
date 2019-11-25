@@ -151,8 +151,8 @@ class Gui:
 
         # added by Yitzchak:
         no_shows_scrollbar2 = Scrollbar(no_show_frame, command=no_shows_canvas.xview, orient=HORIZONTAL)
-        no_shows_scrollbar2.pack(side=BOTTOM, fill=X, expand=False)
         no_shows_scrollbar.pack(side=RIGHT, fill=Y, expand=False)
+        no_shows_scrollbar2.pack(side=BOTTOM, fill=X, expand=False)
         no_shows_canvas.pack(side=LEFT, expand=True, fill=BOTH)
 
         no_shows_canvas.configure(xscrollcommand=no_shows_scrollbar2.set)

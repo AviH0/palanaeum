@@ -9,15 +9,20 @@ try:
 except ImportError:
     # for Python3
     import tkinter as tk
+
+
 class CreateToolTip(object):
     '''
     create a tooltip for a given widget
     '''
+
     def __init__(self, widget, text='widget info'):
         self.widget = widget
         self.text = text
         self.widget.bind("<Enter>", self.enter)
         self.widget.bind("<Leave>", self.close)
+        self.widget.bind("<Destroy>", self.close)
+
     def enter(self, event=None):
         x = y = 0
         x, y, cx, cy = self.widget.bbox("insert")
@@ -33,6 +38,7 @@ class CreateToolTip(object):
                          font=("times", "10", "normal"))
         label.pack(ipadx=1)
         self.widget.after(DESTROY_DELAY, self.close)
+
     def close(self, event=None):
         if self.tw:
             self.tw.destroy()
