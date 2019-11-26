@@ -232,7 +232,7 @@ class Gui:
 
         # Clear the current list of students in queue:
         for slave in self.names_frame.pack_slaves():
-            slave.pack_forget()
+            slave.destroy()
 
         # Draw the list of students in queue:
         for stu in self.current_list:
@@ -252,7 +252,7 @@ class Gui:
 
         # Clear the current list of no-shows:
         for slave in self.no_shows_frame.pack_slaves():
-            slave.pack_forget()
+            slave.destroy()
         # Draw the current list of no-shows:
         for stu in self.no_shows_list:
             if stu.should_be_red():  # Determine whether he is orange or red
