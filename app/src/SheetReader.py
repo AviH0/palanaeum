@@ -13,7 +13,7 @@ except ImportError:
 # Share spreadsheet with following email address: lab-support@lab-support-intro2cs.iam.gserviceaccount.com
 # Then paste the name of the spreadsheet in the following variable:
 CREDENTIALS_DIRECTORY = 'app/credentials/Lab Support Intro2CS-273f7439f27c.json'
-NAME_OF_SPREADSHEET = "Intro2CS - Lab Support Queue - Edit"
+NAME_OF_SPREADSHEET = "Copy of Intro2CS - Lab Support Queue - Edit"
 
 
 def authenticate(func):
