@@ -122,7 +122,7 @@ class Gui:
         names_scrollbar = Scrollbar(student_list_frame, command=names_canvas.yview, orient=VERTICAL)
         names_canvas.configure(yscrollcommand=names_scrollbar.set)
         names_canvas.create_window((0, 0), window=self.names_frame, anchor=NW)
-        student_list_frame.bind("<Configure>",
+        self.names_frame.bind("<Configure>",
                                 lambda x: names_canvas.configure(scrollregion=names_canvas.bbox(ALL)))
         student_list_frame.grid(row=1, column=1, padx=LIST_TOPFRM_PADX, rowspan=2)
 
@@ -158,7 +158,7 @@ class Gui:
         no_shows_canvas.configure(xscrollcommand=no_shows_scrollbar2.set)
         #
 
-        no_show_frame.bind("<Configure>",
+        self.no_shows_frame.bind("<Configure>",
                            lambda x: no_shows_canvas.configure(scrollregion=no_shows_canvas.bbox(ALL)))
         no_show_frame.grid(row=1, column=3, padx=NO_SHOW_FRM_PADX, rowspan=2)
 
