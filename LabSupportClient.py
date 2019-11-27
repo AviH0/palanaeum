@@ -2,7 +2,7 @@ from app.src import GUI
 from app.src.updates import updater
 
 if __name__ == '__main__':
-    # if updater.do_update():
-    #     print("Client updated, please restart.")
-    #     exit(0)
+    if updater.do_update():
+        print("Client updated, please restart.")
+        exit(0)
     gui = GUI.Gui()
