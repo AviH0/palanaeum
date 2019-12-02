@@ -244,7 +244,7 @@ class Gui:
         """
         # Get the relevant rows from the reader.
         rows = self.reader.get_current_rows()
-        if not rows:
+        if rows is None:
             self.show_network_error()
             return False
         self.connection_status.set("-- Connected --")
