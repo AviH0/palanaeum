@@ -71,7 +71,7 @@ def save_configurations():
     with open(CONFIG_FILE_PATH, 'w') as file:
         file.write(
             "// This is a config file for LabSupportClient. You may set config values as in the following "
-            "example:\n// credentials location=\"path\\to\\credentials\"\n// Lines strting with '//' are "
+            "example:\n// credentials location=\"path\\to\\credentials\"\n// Lines starting with '//' are "
             "ignored.\n\n\n// ----------------------------------------------------------------------------------------- //\n\n")
         for key in settings.keys():
             file.write(key + '=' + "\"{}\"".format(settings[key]) + '\n')
