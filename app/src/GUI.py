@@ -1,7 +1,4 @@
-import asyncio
 import json
-import queue
-import threading
 from time import localtime
 from time import strftime
 from tkinter import *
@@ -11,8 +8,6 @@ from app.src.tooltip import CreateToolTip
 
 from app.src import SheetReader
 from app.src.Student import Student
-
-NO_CONNECTION = "-- No Connection --"
 
 GET_INDEX_REGEX = '\((\d+)\).+'
 
@@ -78,15 +73,13 @@ class Gui:
         menubar = Menu(self.root)
 
         file_menu = Menu(menubar, tearoff=0)
-        file_menu.add_command(label="Exit", command=self.close)
+        file_menu.add_command(label="Exit", command=self.root.quit)
         menubar.add_cascade(label="File", menu=file_menu)
 
         # Add view menu:
         view_menu = Menu(menubar, tearoff=0)
-
         def toggle_always_ontop():
             currently_on_top = [False]
-
             def inner():
                 if not currently_on_top[0]:
                     self.root.wm_attributes("-topmost", 1)
@@ -94,7 +87,6 @@ class Gui:
                 else:
                     self.root.wm_attributes("-topmost", 0)
                     currently_on_top[0] = False
-
             return inner
 
         view_menu.add_checkbutton(label="Always on top", command=toggle_always_ontop())
@@ -114,18 +106,7 @@ class Gui:
         self.current_list = []
         self.no_shows_list = []
 
-        self.connection_status = StringVar()
-        self.connection_status.set(NO_CONNECTION)
-        self.connection_status.trace('w', lambda *args: self.connection_status_label.config(
-            fg='red') if self.connection_status.get() == NO_CONNECTION else self.connection_status_label.config(
-            fg='green'))
         # --- Build interface: ---
-
-        # Connection Status:
-
-        self.connection_status_label = Label(self.root, font=HEADER2_FONT,
-                                             textvariable=self.connection_status)
-        self.connection_status_label.grid(row=0, column=0, sticky=S)
 
         # Student List:
 
@@ -142,7 +123,7 @@ class Gui:
         names_canvas.configure(yscrollcommand=names_scrollbar.set)
         names_canvas.create_window((0, 0), window=self.names_frame, anchor=NW)
         self.names_frame.bind("<Configure>",
-                              lambda x: names_canvas.configure(scrollregion=names_canvas.bbox(ALL)))
+                                lambda x: names_canvas.configure(scrollregion=names_canvas.bbox(ALL)))
         student_list_frame.grid(row=1, column=1, padx=LIST_TOPFRM_PADX, rowspan=2)
 
         # added by Yitzchak:
@@ -178,7 +159,7 @@ class Gui:
         #
 
         self.no_shows_frame.bind("<Configure>",
-                                 lambda x: no_shows_canvas.configure(scrollregion=no_shows_canvas.bbox(ALL)))
+                           lambda x: no_shows_canvas.configure(scrollregion=no_shows_canvas.bbox(ALL)))
         no_show_frame.grid(row=1, column=3, padx=NO_SHOW_FRM_PADX, rowspan=2)
 
         # Current state frame:
@@ -203,51 +184,24 @@ class Gui:
 
         # --- Initialize ---
 
-        # self.__get_info()  # Get current data from spreadsheet
-        # self.__next_student(False)  # Get the next student
-        self.gui_queue = queue.Queue()
+        self.__get_info()  # Get current data from spreadsheet
+        self.__next_student(False)  # Get the next student
 
         def draw_loop():
-            self.root.after(500, draw_loop)
-            try:
-                self.gui_queue.get_nowait()()
-            except queue.Empty:
-                pass
+            self.root.after(5000, draw_loop)
+            if self.__get_info():
+                self.draw()
 
-        self.root.protocol('WM_DELETE_WINDOW', self.close)
-
-        threading.Thread(target=lambda: self.start_get_info_loop()).start()
-        self.root.after(500, draw_loop)  # Draw the current data in a loop
+        self.root.after(1000, draw_loop)  # Draw the current data in a loop
         self.root.mainloop()  # Start the mainloop
 
-    def close(self):
-        self.loop.stop()
-        self.root.quit()
-
-    async def get_info_loop(self):
-        while True:
-            await self.__get_info()
-            await asyncio.sleep(5)
-
-    def start_get_info_loop(self):
-        self.loop = asyncio.new_event_loop()
-        asyncio.set_event_loop(self.loop)
-        self.loop.create_task(self.get_info_loop())
-        self.loop.run_forever()
-        # asyncio.run(self.get_info_loop())
-
-
-    async def __get_info(self):
+    def __get_info(self):
         """
         Update the list of students from the google spreadsheet. Called internally by draw.
         :return: Nothing
         """
         # Get the relevant rows from the reader.
         rows = self.reader.get_current_rows()
-        if not rows:
-            self.show_network_error()
-            return False
-        self.connection_status.set("-- Connected --")
         new_list = []
         no_show_list = []
         for index, row in enumerate(rows):
@@ -265,9 +219,8 @@ class Gui:
         self.current_list = new_list
         self.no_shows_list = no_show_list
         self.current_data = rows
-        if need_to_redraw:
-            self.gui_queue.put(self.draw)
         return need_to_redraw
+
 
     def draw(self):
         """
@@ -275,7 +228,7 @@ class Gui:
         :return: Nothing
         """
         # Get the updated info
-        asyncio.get_event_loop().run_until_complete(self.__get_info())
+        self.__get_info()
 
         # Clear the current list of students in queue:
         for slave in self.names_frame.pack_slaves():
@@ -362,7 +315,7 @@ class Gui:
         # If the current student is finished, do that:
         if self.current_student and finished:
             self.reader.stu_finished(self.current_student.index)
-            asyncio.get_event_loop().run_until_complete(self.__get_info())
+            self.__get_info()
 
         # If there are no students left in the queue, handle that and return.
         if len(self.current_list) == 0:
@@ -370,7 +323,7 @@ class Gui:
             self.draw()
             return
 
-        # self.__get_info()  # Better to update so we are sure we are seeing the correct info.
+        self.__get_info()  # Better to update so we are sure we are seeing the correct info.
         # Go through the list, ignoring yellow and green students, and find the next student in the queue.
         # The queue should be sorted by timestamp in the spreadsheet. If that changes, the queue order
         # will change.
@@ -426,8 +379,7 @@ class Gui:
                 self.reader.reset_stu(self.current_student.index)
 
         # Update the list, get the student by his index, start helping him.
-        asyncio.get_event_loop().run_until_complete(self.__get_info())
-
+        self.__get_info()
         stu = self.__stu_from_index(index)
         self.current_student = stu
         self.reader.stu_arrived(stu.index)
@@ -448,8 +400,7 @@ class Gui:
                 self.reader.reset_stu(self.current_student.index)
 
         # Update the list, get the student by his index, make him yellow:
-        asyncio.get_event_loop().run_until_complete(self.__get_info())
-
+        self.__get_info()
         stu = self.__stu_from_index(index)
         self.current_student = stu
         self.reader.stu_arrived(stu.index)
@@ -526,8 +477,7 @@ class Gui:
         """
         # Reset him:
         self.reader.reset_stu(index)
-        asyncio.get_event_loop().run_until_complete(self.__get_info())
-
+        self.__get_info()
         # If he was the current student, get the next one:
         if self.current_student and index is self.current_student.index:
             self.current_student = None
@@ -543,7 +493,7 @@ class Gui:
         """
         # Remove him:
         self.reader.remove_stu(index)
-        asyncio.get_event_loop().run_until_complete(self.__get_info())
+        self.__get_info()
         # Indexes have changed, so find where the current student is now and load him:
         if self.current_student:
             for stu in self.current_list:
@@ -577,6 +527,3 @@ class Gui:
         """
         pattern = GET_INDEX_REGEX
         return int(re.search(pattern, name).group(1)) - 1
-
-    def show_network_error(self):
-        self.connection_status.set(NO_CONNECTION)

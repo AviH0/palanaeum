@@ -1,6 +1,7 @@
 import sys
+import app.src.config
+app.src.config.load_configurations()
 
-import httplib2
 
 try:
     import gspread
@@ -14,8 +15,10 @@ except ImportError:
 
 # Share spreadsheet with following email address: lab-support@lab-support-intro2cs.iam.gserviceaccount.com
 # Then paste the name of the spreadsheet in the following variable:
-CREDENTIALS_DIRECTORY = 'app/credentials/Lab Support Intro2CS-273f7439f27c.json'
-NAME_OF_SPREADSHEET = "Intro2CS - Lab Support Queue - Edit"
+CREDENTIALS_DIRECTORY = app.src.config.settings[
+    app.src.config.PATH_TO_CREDENETIALS]  # 'app/credentials/Lab Support Intro2CS-273f7439f27c.json'
+NAME_OF_SPREADSHEET = app.src.config.settings[
+    app.src.config.SOURCE_SPREADSHEET]  # "Intro2CS - Lab Support Queue - Edit"
 
 
 def authenticate(func):
@@ -27,9 +30,7 @@ def authenticate(func):
             return inner(*args, **kwargs)
         except requests.exceptions.ConnectionError:
             print("Connection error, please check network connection.", file=sys.stderr)
-        except AttributeError:
-            args[0].reauth()
-            return inner(*args, **kwargs)
+
     return inner
 
 
@@ -42,42 +43,23 @@ class SheetReader:
     def __init__(self):
         # use creds to create a client to interact with the Google Drive API
         self.scope = ['https://www.googleapis.com/auth/drive']
-        self.sheet = None
-        self.client = None
-        self.creds = None
-        self.reinitialize()
-
-    def reauth(self):
-        if self.client and self.sheet:
-            self.client = gspread.authorize(self.creds)
-            self.sheet = self.client.open(NAME_OF_SPREADSHEET).get_worksheet(1)
-            return
-        self.reinitialize()
-
-    def reinitialize(self):
         try:
             self.creds = ServiceAccountCredentials.from_json_keyfile_name(CREDENTIALS_DIRECTORY, self.scope)
             self.client = gspread.authorize(self.creds)
+
             # Find a workbook by name and open the second sheet
             # Make sure you use the right name here.
             self.sheet = self.client.open(NAME_OF_SPREADSHEET).get_worksheet(1)
         except FileNotFoundError:
             print("Please ensure client secret json file is present in credentials directory")
-        except gspread.exceptions.APIError:
-            print("Unexpected authorization error.")
-            exit(0)
-        except httplib2.ServerNotFoundError:
-            print("Connection error, please check network connection.", file=sys.stderr)
-        except requests.exceptions.ConnectionError:
-            print("Connection error, please check network connection.", file=sys.stderr)
+
+    def reauth(self):
+        self.client = gspread.authorize(self.creds)
+        self.sheet = self.client.open(NAME_OF_SPREADSHEET).get_worksheet(1)
 
     @authenticate
     def get_current_rows(self):
-        try:
-            return self.sheet.get_all_values()[4:]
-        except httplib2.ServerNotFoundError:
-            print("Connection error, please check network connection.", file=sys.stderr)
-            return None
+        return self.sheet.get_all_values()[4:]
 
     @authenticate
     def stu_finished(self, index):
