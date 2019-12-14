@@ -63,9 +63,10 @@ class SheetReader:
             self.sheet = self.client.open(NAME_OF_SPREADSHEET).get_worksheet(1)
         except FileNotFoundError:
             print("Please ensure client secret json file is present in credentials directory")
+            exit(1)
         except gspread.exceptions.APIError:
             print("Unexpected authorization error.")
-            exit(0)
+            exit(1)
         except httplib2.ServerNotFoundError:
             print("Connection error, please check network connection.", file=sys.stderr)
         except requests.exceptions.ConnectionError:
