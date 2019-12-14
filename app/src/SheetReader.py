@@ -1,10 +1,10 @@
 import sys
 
-import httplib2
 
 try:
     import gspread
     from oauth2client.service_account import ServiceAccountCredentials
+    import httplib2
     import requests
 except ImportError:
     print("Please ensure you have the packages: oauth2client, gspread installed before using.\n"
