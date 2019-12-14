@@ -1,5 +1,7 @@
 import sys
 
+import httplib2
+
 try:
     import gspread
     from oauth2client.service_account import ServiceAccountCredentials
@@ -25,6 +27,9 @@ def authenticate(func):
             return inner(*args, **kwargs)
         except requests.exceptions.ConnectionError:
             print("Connection error, please check network connection.", file=sys.stderr)
+        except AttributeError:
+            args[0].reauth()
+            return inner(*args, **kwargs)
     return inner
 
 
@@ -37,24 +42,42 @@ class SheetReader:
     def __init__(self):
         # use creds to create a client to interact with the Google Drive API
         self.scope = ['https://www.googleapis.com/auth/drive']
+        self.sheet = None
+        self.client = None
+        self.creds = None
+        self.reinitialize()
+
+    def reauth(self):
+        if self.client and self.sheet:
+            self.client = gspread.authorize(self.creds)
+            self.sheet = self.client.open(NAME_OF_SPREADSHEET).get_worksheet(1)
+            return
+        self.reinitialize()
+
+    def reinitialize(self):
         try:
             self.creds = ServiceAccountCredentials.from_json_keyfile_name(CREDENTIALS_DIRECTORY, self.scope)
             self.client = gspread.authorize(self.creds)
-
             # Find a workbook by name and open the second sheet
             # Make sure you use the right name here.
             self.sheet = self.client.open(NAME_OF_SPREADSHEET).get_worksheet(1)
         except FileNotFoundError:
             print("Please ensure client secret json file is present in credentials directory")
-            exit(1)
-
-    def reauth(self):
-        self.client = gspread.authorize(self.creds)
-        self.sheet = self.client.open(NAME_OF_SPREADSHEET).get_worksheet(1)
+        except gspread.exceptions.APIError:
+            print("Unexpected authorization error.")
+            exit(0)
+        except httplib2.ServerNotFoundError:
+            print("Connection error, please check network connection.", file=sys.stderr)
+        except requests.exceptions.ConnectionError:
+            print("Connection error, please check network connection.", file=sys.stderr)
 
     @authenticate
     def get_current_rows(self):
-        return self.sheet.get_all_values()[4:]
+        try:
+            return self.sheet.get_all_values()[4:]
+        except httplib2.ServerNotFoundError:
+            print("Connection error, please check network connection.", file=sys.stderr)
+            return None
 
     @authenticate
     def stu_finished(self, index):
