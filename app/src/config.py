@@ -61,7 +61,7 @@ def load_configurations():
 
         for line in lines:
             key, value = line.split('=')
-            settings[key] = value[1:-1]
+            settings[key] = value.strip()[1:-1]
     else:
         print("Cannot find config file, falling back on default settings.")
 
@@ -71,8 +71,10 @@ def save_configurations():
     with open(CONFIG_FILE_PATH, 'w') as file:
         file.write(
             "// This is a config file for LabSupportClient. You may set config values as in the following "
-            "example:\n// credentials location=\"path\\to\\credentials\"\n// Lines starting with '//' are "
-            "ignored.\n\n\n// ----------------------------------------------------------------------------------------- //\n\n")
+            "example:\n// credentials location=\"path\\to\\credentials\"\n// Lines starting with '//' "
+            "(and empty lines) are ignored.\n\n\n"
+            "// ----------------------------------------------------------------------------------------- //"
+            "\n\n")
         for key in settings.keys():
             file.write(key + '=' + "\"{}\"".format(settings[key]) + '\n')
     print("Configurations saved.")
