@@ -46,6 +46,7 @@ class SheetReader:
             self.sheet = self.client.open(NAME_OF_SPREADSHEET).get_worksheet(1)
         except FileNotFoundError:
             print("Please ensure client secret json file is present in credentials directory")
+            exit(1)
 
     def reauth(self):
         self.client = gspread.authorize(self.creds)
