@@ -13,8 +13,10 @@ class Student:
             self.index = stu.index
         else:
             self.timestamp = row[0]
-            self.name = row[1]
-            self.topic = row[2]
+            self.name = str(row[1]).encode(encoding='cp424', errors='replace').decode(encoding='cp424',
+                                                                                      errors='replace')
+            self.topic = str(row[2]).encode(encoding='cp424', errors='replace').decode(encoding='cp424',
+                                                                                       errors='replace')
             self.time_made_orange = row[3]
             self.status = None
             if len(row) > 4:
