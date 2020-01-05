@@ -26,8 +26,13 @@ class Student:
             return False
         date_pattern = '(\d+)/(\d+)/(\d+)'
         date_result = re.search(date_pattern, self.timestamp)
-        time_made_orange = datetime.datetime.now().replace(day=int(date_result.group(2)), month=int(date_result.group(1)),
-                                  year=int(date_result.group(3)), hour=int(self.time_made_orange[:2]),
-                                  minute=int(self.time_made_orange[3:]))
-        return datetime.datetime.now().timestamp() - time_made_orange.timestamp() > 60*30
-
+        time_made_orange = self.time_made_orange.split(':')
+        hours = int(time_made_orange[0].zfill(2))
+        minutes = int(time_made_orange[1].zfill(2))
+        if len(time_made_orange) > 2 and time_made_orange[2][-2:] == 'PM':
+            hours += 12
+        time_made_orange = datetime.datetime.now().replace(day=int(date_result.group(2)),
+                                                           month=int(date_result.group(1)),
+                                                           year=int(date_result.group(3)), hour=hours,
+                                                           minute=minutes)
+        return datetime.datetime.now().timestamp() - time_made_orange.timestamp() > 60 * 30
