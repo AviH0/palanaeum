@@ -1,5 +1,13 @@
 import datetime
 import re
+import os
+
+
+
+OS = os.name
+
+is_linux = OS == 'linux' or OS == 'posix'
+HEBREW = "קראטוןםפשדגכעיחלךףץתצמנהבסז"
 
 
 class Student:
@@ -13,15 +21,37 @@ class Student:
             self.index = stu.index
         else:
             self.timestamp = row[0]
-            self.name = str(row[1]).encode(encoding='cp424', errors='replace').decode(encoding='cp424',
-                                                                                      errors='replace')
+            self.name = self.fix_hebrew(str(row[1]).encode(encoding='cp424', errors='replace').decode(encoding='cp424',
+                                                                                      errors='replace'))
             self.topic = str(row[2]).encode(encoding='cp424', errors='replace').decode(encoding='cp424',
                                                                                        errors='replace')
+
             self.time_made_orange = row[3]
             self.status = None
             if len(row) > 4:
                 self.status = row[4]
             self.index = index
+
+    def fix_hebrew(self, string: str):
+        if not is_linux:
+            return string
+        words = string.split()
+        fixed_words = []
+        first_word = True
+        rtl = False
+        for word in words:
+            for letter in word:
+                if letter not in HEBREW:
+                    fixed_words.append(word)
+                    first_word = False
+                    break
+            else:
+                rtl = first_word if first_word else rtl
+                first_word = False
+                fixed_words.append(word[::-1])
+        if rtl:
+            fixed_words = fixed_words[::-1]
+        return " ".join(fixed_words)
 
     def should_be_red(self):
         if not self.time_made_orange:
