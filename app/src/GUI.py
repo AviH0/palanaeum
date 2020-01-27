@@ -223,6 +223,7 @@ class Gui:
     def close(self):
         self.loop.stop()
         self.root.quit()
+        sys.exit(0)
 
     async def get_info_loop(self):
         while True:
