@@ -4,12 +4,11 @@ import zipfile
 import os
 import json
 
-
-DEFAULT_URL = "https://github.com/AviH0/LabSupportInterface/archive/master.zip"
+DEFAULT_URL = "https://github.com/AviH0/LabSupportInterface/releases/download/Latest/LS_Windows.zip"
 UPDATE_FILE = 'update.zip'
 
 TEMP_DIR = ".update_data"
-ARCHIVE_ROOT_NAME = "LabSupportInterface-master"
+ARCHIVE_ROOT_NAME = ""
 INF_JSON_URL = "https://raw.githubusercontent.com/AviH0/LabSupportInterface/master/app/src/updates/inf.json"
 
 
@@ -22,10 +21,15 @@ def do_update():
         __copy_update()
         __clean_up()
         print("Update successful.")
+        os.execv("LabSupportClient.exe", ['a'])
         return True
     else:
         print("Installed version is up-to-date.")
         return False
+
+
+def check_for_updates():
+    return __is_update_needed()
 
 
 def __is_update_needed():
@@ -60,7 +64,7 @@ def __download_update():
     print("Fetching update... ", end='')
     r = requests.get(DEFAULT_URL, stream=True)
     with open(UPDATE_FILE, 'wb') as f:
-        for chunk in r.iter_content():
+        for chunk in r.iter_content(chunk_size=None):
             f.write(chunk)
     print("done.")
 
@@ -103,5 +107,3 @@ def __recursive_overwrite(src, dest, ignore=None):
                                       ignore)
     else:
         shutil.copyfile(src, dest)
-
-
