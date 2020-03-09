@@ -17,7 +17,6 @@ def fetch_updater():
         for chunk in r.iter_content(chunk_size=None):
             f.write(chunk)
     print("done.")
-    gui = GUI.Gui()
 
 if __name__ == '__main__':
     updates_disabled = False
@@ -27,4 +26,6 @@ if __name__ == '__main__':
         fetch_updater()
         os.execv(UPDATER_FILE, ['a'])
     from app.src import GUI
+    gui = GUI.Gui()
+
 

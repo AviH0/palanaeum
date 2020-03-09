@@ -13,7 +13,6 @@ INF_JSON_URL = "https://raw.githubusercontent.com/AviH0/LabSupportInterface/mast
 
 
 def do_update():
-    print("checking for updates...")
     if __is_update_needed():
         print("Updating LabSupportClient...\n")
         __download_update()
@@ -24,15 +23,17 @@ def do_update():
         os.execv("LabSupportClient.exe", ['a'])
         return True
     else:
-        print("Installed version is up-to-date.")
         return False
 
 
 def check_for_updates():
-    return __is_update_needed()
+
+    if __is_update_needed():
+        return True
 
 
 def __is_update_needed():
+    print("checking for updates...")
     try:
         with open("app/src/updates/inf.json") as inf:
             product_info = json.load(inf)
@@ -40,14 +41,20 @@ def __is_update_needed():
             newest_info = r.json()
             installed_version = product_info["version"].split('.')
             newest_version = newest_info["version"].split('.')
-            return __compare_versions(installed_version, newest_version)
+            if __compare_versions(installed_version, newest_version):
+                print("newer version found.")
+                return True
     except json.JSONDecodeError:
+        print("Problem identifying current version")
         return True
     except FileNotFoundError:
+        print("Problem identifying current version")
         return True
     except requests.ConnectionError:
         print("Could not connect to update server.")
         return False
+    print("Installed version is up-to-date.")
+    return False
 
 
 def __compare_versions(installed_version, newest_version):
