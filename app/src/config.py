@@ -9,10 +9,11 @@ CONFIG_FILE_PATH = os.path.join(CONFIG_DIRECTORY, CONFIG_FILENAME)
 
 PATH_TO_CREDENETIALS = 'credentials location'
 SOURCE_SPREADSHEET = 'spreadsheet name'
+IS_EMAIL_COLUMN = "email column"
 
 settings = {PATH_TO_CREDENETIALS: os.path.join(os.path.curdir, 'app', 'credentials',
                                                'Lab Support Intro2CS-273f7439f27c.json'),
-            SOURCE_SPREADSHEET: 'Sheet'}
+            SOURCE_SPREADSHEET: 'Sheet', IS_EMAIL_COLUMN: None}
 
 
 def change_settings(root=None):
