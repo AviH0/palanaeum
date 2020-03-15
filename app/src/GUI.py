@@ -315,7 +315,7 @@ class Gui:
             name.pack(anchor=W, fill=X, expand=True)
             text = TIMESTAMP.format(stu.timestamp)
             if stu.sent_mail:
-                text += '(Mail Invite Sent)'
+                text += ' (Mail Invite Sent)'
             CreateToolTip(name, text)
 
         # Clear the current list of no-shows:
