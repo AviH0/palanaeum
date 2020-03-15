@@ -11,7 +11,7 @@ from app.src.tooltip import CreateToolTip
 
 from app.src import SheetReader
 from app.src.Student import Student
-from src.emailWriter import EmailWriter
+from app.src.emailWriter import EmailWriter
 import app.src.config
 
 NO_CONNECTION = "-- No Connection --"
@@ -315,7 +315,7 @@ class Gui:
             name.pack(anchor=W, fill=X, expand=True)
             text = TIMESTAMP.format(stu.timestamp)
             if stu.sent_mail:
-                text += '(Mail Invite Sent)'
+                text += ' (Mail Invite Sent)'
             CreateToolTip(name, text)
 
         # Clear the current list of no-shows:

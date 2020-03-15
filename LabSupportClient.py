@@ -28,4 +28,3 @@ if __name__ == '__main__':
     from app.src import GUI
     gui = GUI.Gui()
 
-
