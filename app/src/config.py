@@ -11,7 +11,7 @@ PATH_TO_CREDENETIALS = 'Credentials Location'
 PATH_TO_CLIENT_SECRET = 'Client Secret Location'
 SOURCE_SPREADSHEET = 'Spreadsheet Name'
 SESSION_LINK = 'Link to Session'
-INVITE_MSG_BODY = 'Invite Message Body'
+INVITE_MSG_BODY = 'Invite Message File'
 MAIL_ACCOUNT_CREDS = 'Mail Account Credentials'
 
 

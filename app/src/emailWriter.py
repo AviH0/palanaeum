@@ -48,7 +48,9 @@ class EmailWriter:
         return {"raw": base64.urlsafe_b64encode(message.as_string().encode()).decode()}
 
     def send_message_with_link(self, address, link):
-        message_body = self.settings.settings[app.src.config.INVITE_MSG_BODY]
+        message_file = self.settings.settings[app.src.config.INVITE_MSG_BODY]
+        with open(message_file) as f:
+            message_body = f.read()
         message_text = message_body + link
         message = self.create_message("labsupportcs", address, 'LAB SUPPORT', message_text)
         self.send_message(message)
