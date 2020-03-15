@@ -313,7 +313,10 @@ class Gui:
                          justify=LEFT, width=500)
             name.bind("<Button-3>", lambda event: self.__right_click_menu(event))
             name.pack(anchor=W, fill=X, expand=True)
-            CreateToolTip(name, TIMESTAMP.format(stu.timestamp))
+            text = TIMESTAMP.format(stu.timestamp)
+            if stu.sent_mail:
+                text += '(Mail Invite Sent)'
+            CreateToolTip(name, text)
 
         # Clear the current list of no-shows:
         for slave in self.no_shows_frame.pack_slaves():
@@ -334,7 +337,10 @@ class Gui:
                       lambda event: self.__load_no_show(event))
             name.bind("<Button-3>", lambda event: self.__right_click_menu(event))
             name.pack(anchor=W, fill=X, expand=True)
-            CreateToolTip(name, TIMESTAMP.format(stu.timestamp))
+            text = TIMESTAMP.format(stu.timestamp)
+            if stu.sent_mail:
+                text += ' (Mail Invite Sent)'
+            CreateToolTip(name, text)
 
         # Set the current information to display:
         name = ""
