@@ -226,7 +226,7 @@ class Gui:
         self.gui_queue = queue.Queue()
 
         def draw_loop():
-            self.root.after(500, draw_loop)
+            self.root.after(100, draw_loop)
             try:
                 self.gui_queue.get_nowait()()
             except queue.Empty:
@@ -283,7 +283,7 @@ class Gui:
         self.current_list = new_list
         self.no_shows_list = no_show_list
         self.current_data = rows
-        if need_to_redraw:
+        if need_to_redraw and self.gui_queue.empty():
             self.gui_queue.put(self.draw)
         return need_to_redraw
 
@@ -293,7 +293,7 @@ class Gui:
         :return: Nothing
         """
         # Get the updated info
-        # asyncio.get_event_loop().run_until_complete(self.__get_info())
+        # self.__get_info()
 
         # Clear the current list of students in queue:
         for slave in self.names_frame.pack_slaves():
@@ -375,7 +375,7 @@ class Gui:
         if not self.current_student:
             return
         self.current_status = HELPING
-        self.draw()
+        self.root.after(1, self.draw)
 
     def __next_student(self, finished=True):
         """
@@ -391,7 +391,7 @@ class Gui:
         # If there are no students left in the queue, handle that and return.
         if len(self.current_list) == 0:
             self.current_student = None
-            self.draw()
+            self.root.after(1, lambda: asyncio.get_event_loop().run_until_complete(self.__get_info()))
             return
 
         # self.__get_info()  # Better to update so we are sure we are seeing the correct info.
@@ -410,7 +410,7 @@ class Gui:
         else:
             # No students found on the list (all are yellow or green)
             self.current_student = None
-            self.draw()
+            self.root.after(1, lambda: asyncio.get_event_loop().run_until_complete(self.__get_info()))
             return
 
         # A student was selected, change his status to yellow.
@@ -418,7 +418,7 @@ class Gui:
 
         # Status is now Waiting
         self.current_status = WAITING
-        self.draw()
+        self.root.after(1, lambda: asyncio.get_event_loop().run_until_complete(self.__get_info()))
 
     def __student_no_show(self):
         """
@@ -434,7 +434,7 @@ class Gui:
         self.reader.stu_no_showed(self.current_student.index, hour)
 
         self.no_show_button.configure(state=DISABLED)
-        self.__next_student(False)
+        self.root.after(1, lambda: self.__next_student(False))
 
     def __load_student(self, index):
         """
@@ -456,7 +456,7 @@ class Gui:
         self.current_student = stu
         self.reader.stu_arrived(stu.index)
         self.current_status = HELPING
-        self.draw()
+        self.root.after(1, lambda: asyncio.get_event_loop().run_until_complete(self.__get_info()))
 
     def __call_stu(self, index):
         """
@@ -478,7 +478,8 @@ class Gui:
         self.current_student = stu
         self.reader.stu_arrived(stu.index)
         self.current_status = WAITING
-        self.draw()
+
+        self.root.after(1, lambda: asyncio.get_event_loop().run_until_complete(self.__get_info()))
 
     def __stu_from_index(self, index):
         """
@@ -568,7 +569,7 @@ class Gui:
             self.current_student = None
             # self.__next_student(False)
         else:
-            self.draw()
+            self.root.after(1, lambda: asyncio.get_event_loop().run_until_complete(self.__get_info()))
 
     def __remove_stu(self, index):
         """
@@ -587,7 +588,7 @@ class Gui:
                     break
             else:
                 self.current_student = None
-        self.draw()
+        self.root.after(1, lambda: asyncio.get_event_loop().run_until_complete(self.__get_info()))
 
     @staticmethod
     def __display_product_info():
