@@ -63,6 +63,8 @@ class Settings:
                 while line:
                     # Erase all leading and trailing white spaces:
                     line = line.strip()
+                    # Erase all leading and trailing white spaces:
+                    line = line.strip()
                     # Find and erase comments:
                     # comment = line.find('//')
                     # if comment >= 0:
@@ -71,7 +73,7 @@ class Settings:
                     # if not line:
                     #     line = file.readline()
                     #     continue
-                    if line[0] == '/' and line[1] == '/':
+                    if not line or len(line) >= 2 and line[0] == '/' and line[1] == '/':
                         line = file.readline()
                         continue
 
