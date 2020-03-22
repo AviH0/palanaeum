@@ -74,6 +74,7 @@ def __download_update():
         # for chunk in r.iter_content(chunk_size=1024*10):
         #     f.write(chunk)
         shutil.copyfileobj(r.raw, f, length=1024*1024)
+    r.close()
     print("done.")
 
 
