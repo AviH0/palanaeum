@@ -71,7 +71,7 @@ class Settings:
                     # if not line:
                     #     line = file.readline()
                     #     continue
-                    if line[0] == '/' and line[1] == '/':
+                    if not line or len(line) >= 2 and line[0] == '/' and line[1] == '/':
                         line = file.readline()
                         continue
 
