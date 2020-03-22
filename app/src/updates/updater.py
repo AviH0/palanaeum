@@ -69,12 +69,11 @@ def __compare_versions(installed_version, newest_version):
 
 def __download_update():
     print("Fetching update... ", end='')
-    r = requests.get(DEFAULT_URL, headers={'user-agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64; rv:50.0) Gecko/20100101 Firefox/50.0', 'Accept':'text/html,video/mp4,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8'}, stream=True)
-    with open(UPDATE_FILE, 'wb') as f:
-        # for chunk in r.iter_content(chunk_size=1024*10):
-        #     f.write(chunk)
-        shutil.copyfileobj(r.raw, f, length=1024*1024)
-    r.close()
+    with requests.get(DEFAULT_URL, stream=True) as r:
+        with open(UPDATE_FILE, 'wb') as f:
+            # for chunk in r.iter_content(chunk_size=1024*10):
+            #     f.write(chunk)
+            shutil.copyfileobj(r.raw, f, length=1024*1024)
     print("done.")
 
 
