@@ -64,11 +64,14 @@ class Settings:
                     # Erase all leading and trailing white spaces:
                     line = line.strip()
                     # Find and erase comments:
-                    comment = line.find('//')
-                    if comment >= 0:
-                        line = line[:comment]
-
-                    if not line:
+                    # comment = line.find('//')
+                    # if comment >= 0:
+                    #     line = line[:comment]
+                    #
+                    # if not line:
+                    #     line = file.readline()
+                    #     continue
+                    if line[0] == '/' and line[1] == '/':
                         line = file.readline()
                         continue
 
