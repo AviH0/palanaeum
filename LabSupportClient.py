@@ -14,7 +14,7 @@ def fetch_updater():
     print("Fetching updater... ", end='')
     r = requests.get(UPDATER_URL, stream=True)
     with open(UPDATER_FILE, 'wb') as f:
-        for chunk in r.iter_content(chunk_size=None):
+        for chunk in r.iter_content(chunk_size=1024*100):
             f.write(chunk)
     print("done.")
 

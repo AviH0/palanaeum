@@ -129,7 +129,7 @@ class Gui:
 
         # Create some data holders:
         self.current_student = None
-        self.current_list = []
+        self.current_list = ['INIT']
         self.no_shows_list = []
 
         self.connection_status = StringVar()
@@ -279,6 +279,10 @@ class Gui:
                 new_list.append(stu)
 
         need_to_redraw = rows != self.current_data
+
+        # If there were no students waiting and now there are, notify.
+        if not self.current_student and len(list(filter(lambda x: (x.status != '1' and x.status != '3'), new_list))) >= 1 and len(list(filter(lambda x: (x.status != '1' and x.status != '3') if x != 'INIT' else True, self.current_list))) == 0:
+            self.notify()
 
         self.current_list = new_list
         self.no_shows_list = no_show_list
@@ -616,3 +620,6 @@ class Gui:
 
     def show_network_error(self):
         self.connection_status.set(NO_CONNECTION)
+
+    def notify(self):
+        tkinter.messagebox.showinfo("New Student!", "A Student has registered to the queue.")
