@@ -4,6 +4,8 @@ import zipfile
 import os
 import json
 
+from tqdm import tqdm
+
 DEFAULT_URL = "https://github.com/AviH0/LabSupportInterface/releases/download/Latest/LS_Windows.zip"
 UPDATE_FILE = 'update.zip'
 
@@ -71,9 +73,16 @@ def __download_update():
     print("Fetching update... ", end='')
     with requests.get(DEFAULT_URL, stream=True) as r:
         with open(UPDATE_FILE, 'wb') as f:
-            # for chunk in r.iter_content(chunk_size=1024*10):
-            #     f.write(chunk)
-            shutil.copyfileobj(r.raw, f, length=1024*1024)
+            t = tqdm(total=int(r.headers['Content-Length']), desc=f"Downloading {UPDATE_FILE}...",
+                          unit='B', unit_scale=True, unit_divisor=1024, miniters=1)
+            for chunk in r.iter_content(chunk_size=1024 * 100):
+                f.write(chunk)
+                t.update(len(chunk))
+            t.close()
+        # with open(UPDATE_FILE, 'wb') as f:
+        #     # for chunk in r.iter_content(chunk_size=1024*10):
+        #     #     f.write(chunk)
+        #     shutil.copyfileobj(r.raw, f, length=1024*1024)
     print("done.")
 
 
